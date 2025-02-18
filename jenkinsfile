@@ -1,0 +1,11 @@
+pipeline {
+    agent { label 'maven'}
+
+    stages {
+        stage('clone') {
+            steps {
+               git branch: 'main', credentialsId: 'maven-server-credentials', url: 'https://github.com/heena98/Pipeline.git'
+            }
+        }
+    }
+}

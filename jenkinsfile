@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('clone') {
             steps {
-               git branch: 'main', credentialsId: 'maven-server-credentials', url: 'https://github.com/heena98/Pipeline.git'
-            }
+               git branch: 'main', url: 'https://github.com/heena98/Pipeline.git'            }
         }
     }
 }

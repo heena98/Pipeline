@@ -1,10 +1,11 @@
 pipeline {
-    agent { label 'maven'}
+    agent { label 'maven' }
 
     stages {
-        stage('clone') {
+        stage('Clone') {
             steps {
-               git branch: 'main', url: 'https://github.com/heena98/Pipeline.git'            }
+                git branch: 'main', url: 'https://github.com/heena98/Pipeline.git'
+            }
         }
     }
 }

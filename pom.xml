@@ -97,9 +97,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
-                    <forkCount>1</forkCount> <!-- Use a single forked JVM -->
-                    <reuseForks>false</reuseForks> <!-- Do not reuse forked JVMs -->
-                    <argLine>-Xmx4096m</argLine> <!-- Increase memory allocation -->
+                    <argLine>${argLine} -Xmx2048m</argLine>
                 </configuration>
             </plugin>
             <plugin>

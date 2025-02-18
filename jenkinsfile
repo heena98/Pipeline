@@ -1,10 +1,25 @@
 pipeline {
-    agent { label 'maven' }
+    // Define the agent where the pipeline will run
+    agent { 
+        node {
+            // Specify the label of the node to use, in this case, 'maven'
+            label 'maven'
+        }
+    }
+    
+    // Set environment variables
+    environment {
+        // Add Maven to the PATH environment variable
+        PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
+    }
 
+    // Define the stages of the pipeline
     stages {
-        stage('Clone') {
+        stage('build') {
+            // Define the steps to execute in the 'build' stage
             steps {
-                git branch: 'main', url: 'https://github.com/heena98/Pipeline.git'
+                // Run the Maven clean and deploy commands
+                sh 'mvn clean deploy'
             }
         }
     }

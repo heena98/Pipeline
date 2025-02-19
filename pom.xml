@@ -11,15 +11,21 @@
 
     <properties>
         <java.version>17</java.version>
-        <spring.boot.version>2.7.5</spring.boot.version> <!-- Change if using a different version -->
+        <spring.boot.version>2.7.5</spring.boot.version> 
     </properties>
 
     <dependencies>
-        <!-- JUnit 4 for Testing -->
+        <!-- JUnit 5 (Updated from JUnit 4) -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -37,17 +43,10 @@
             </exclusions>
         </dependency>
 
-        <!-- Spring Boot Starter Web (If needed for WebApp Testing) -->
+        <!-- Spring Boot Starter Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.boot.version}</version>
-        </dependency>
-
-        <!-- Spring Boot Starter for Data JPA (If using database) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
 

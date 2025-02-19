@@ -1,15 +1,12 @@
 package com.valaxy.demo;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootTest(classes = DemoWorkshopApplication.class)
-class DemoWorkshopApplicationTests {
+@SpringBootApplication
+public class DemoWorkshopApplication {
 
-    @Test
-    void contextLoads() {
-        List<String> li = new ArrayList<>();
+    public static void main(String[] args) {
+        SpringApplication.run(DemoWorkshopApplication.class, args);
     }
 }

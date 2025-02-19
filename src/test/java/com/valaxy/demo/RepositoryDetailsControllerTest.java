@@ -1,4 +1,4 @@
-package com.stalin.demo;
+package com.valaxy.demo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,25 +9,20 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-@SpringBootTest
+@SpringBootTest(classes = DemoWorkshopApplication.class)
 class RepositoryDetailsControllerTest extends AbstractTest {
 
-	@BeforeEach
-	public void setUp() {
-		super.setUp();
-	}
+    @BeforeEach
+    public void setUp() {
+        super.setUp();
+    }
 
-
-	@Test
-	public void getProductsList() throws Exception {
-		String uri = "/trends?placeid=1&count=5";
-		MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
-				.accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-		int status = mvcResult.getResponse().getStatus();
-		assertEquals(200, status);
-	}
-
-
-
+    @Test
+    public void getProductsList() throws Exception {
+        String uri = "/trends?placeid=1&count=5";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+    }
 }

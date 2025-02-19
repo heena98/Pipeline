@@ -6,6 +6,7 @@ pipeline {
     }
     environment {
         PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
+        MAVEN_OPTS = "-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError"  // Prevent memory issues
     }
     stages {
         stage('Build') {
@@ -20,10 +21,23 @@ pipeline {
                 }
             }
         }
+        stage('Run Tests') {
+            steps {
+                script {
+                    try {
+                        sh 'mvn test -Dsurefire.useFile=false'  // Prevents Surefire plugin fork issues
+                    } catch (Exception e) {
+                        echo "Test execution failed. Check logs for details."
+                        error("Tests failed: ${e.message}")
+                    }
+                }
+            }
+        }
     }
     post {
         always {
             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            archiveArtifacts artifacts: '**/target/surefire-reports/*', allowEmptyArchive: true  // Save test reports
         }
         failure {
             echo "Build failed. Check the logs for more details."

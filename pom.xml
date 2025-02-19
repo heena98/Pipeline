@@ -115,6 +115,17 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>my-repo</id>
+            <url>https://my-repository-url/repository</url>
+        </repository>
+        <snapshotRepository>
+            <id>my-snapshot-repo</id>
+            <url>https://my-snapshot-repository-url/repository</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <!-- Compiler Plugin for Java 17 -->

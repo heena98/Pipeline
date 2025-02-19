@@ -1,16 +1,32 @@
 pipeline {
     agent {
-        node{
-            label'maven'
+        node {
+            label 'maven'
         }
     }
-environment{
-    PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
-}
-    stages {
-        stage('build') {
-            steps {
-                sh 'mvn clean deploy'
-                    }
+    environment {
+        PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
     }
-}}
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    try {
+                        sh 'mvn clean deploy -X'  // Enabling debug mode for Maven
+                    } catch (Exception e) {
+                        echo "Build failed. Check logs for details."
+                        error("Maven build failed: ${e.message}")
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+        }
+        failure {
+            echo "Build failed. Check the logs for more details."
+        }
+    }
+}

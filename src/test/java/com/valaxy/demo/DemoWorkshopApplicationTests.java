@@ -1,12 +1,13 @@
 package com.valaxy.demo;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootApplication
-public class DemoWorkshopApplication {
+@SpringBootTest
+class DemoWorkshopApplicationTests {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DemoWorkshopApplication.class, args);
+    @Test
+    void contextLoads() {
     }
+
 }

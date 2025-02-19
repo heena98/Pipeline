@@ -12,11 +12,18 @@
     <name>demo-workshop</name>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>17</java.version>
+        <spring.boot.version>3.1.2</spring.boot.version>  <!-- Specify Spring Boot version -->
     </properties>
 
     <dependencies>
+        <!-- Spring Boot Starter Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>  <!-- Version added -->
+        </dependency>
+
         <!-- GitHub API Client -->
         <dependency>
             <groupId>org.kohsuke</groupId>
@@ -31,17 +38,11 @@
             <version>4.0.7</version>
         </dependency>
 
-        <!-- Twitter4J Configuration -->
+        <!-- Twitter4J Streaming -->
         <dependency>
             <groupId>org.twitter4j</groupId>
             <artifactId>twitter4j-stream</artifactId>
             <version>4.0.7</version>
-        </dependency>
-
-        <!-- Spring Boot Dependencies (If needed) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- Logging -->
@@ -93,10 +94,11 @@
                 <version>3.0.0-M8</version>
             </plugin>
 
-            <!-- Spring Boot Plugin (If using Spring Boot) -->
+            <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>  <!-- Version added -->
             </plugin>
         </plugins>
     </build>

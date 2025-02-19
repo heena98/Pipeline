@@ -19,7 +19,7 @@ pipeline {
             // Define the steps to execute in the 'build' stage
             steps {
                 // Run the Maven clean and deploy commands
-                sh 'mvn clean deploy -X'
+                sh 'mvn clean deploy'
             }
         }
     }

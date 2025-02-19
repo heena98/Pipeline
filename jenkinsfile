@@ -1,25 +1,26 @@
 pipeline {
-    // Define the agent where the pipeline will run
     agent { 
         node {
-            // Specify the label of the node to use, in this case, 'maven'
             label 'maven'
         }
     }
     
-    // Set environment variables
     environment {
-        // Add Maven to the PATH environment variable
         PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
     }
 
-    // Define the stages of the pipeline
     stages {
         stage('build') {
-            // Define the steps to execute in the 'build' stage
             steps {
-                // Run the Maven clean and deploy commands
-                sh 'mvn clean deploy'
+                script {
+                    try {
+                        sh 'mvn clean deploy'
+                    } catch (Exception e) {
+                        echo "Build failed: ${e.message}"
+                        currentBuild.result = 'FAILURE'
+                        throw e
+                    }
+                }
             }
         }
     }

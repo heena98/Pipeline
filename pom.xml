@@ -136,4 +136,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <!-- Add the distributionManagement section inside the project tag -->
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>https://your-repository-url/repository/releases/</url>
+        </repository>
+    </distributionManagement>
 </project>

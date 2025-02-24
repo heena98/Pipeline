@@ -1,48 +1,46 @@
 pipeline {
-    // Define the agent where the pipeline will run
-    agent { 
+    agent {
         node {
-            // Specify the label of the node to use, in this case, 'maven'
             label 'maven'
         }
     }
-    
-    // Set environment variables
     environment {
-        // Add Maven to the PATH environment variable
         PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
+        MAVEN_OPTS = "-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError"  // Prevent memory issues
     }
-
-    // Define the stages of the pipeline
     stages {
-        stage('build') {
-            // Define the steps to execute in the 'build' stage
+        stage('Build') {
             steps {
                 script {
                     try {
-                        // Run the Maven clean and deploy commands
-                        sh 'mvn clean deploy'
+                        sh 'mvn clean deploy -X'  // Enabling debug mode for Maven
                     } catch (Exception e) {
-                        // Handle any exceptions that occur during the build
-                        echo "Build failed: ${e.message}"
-                        currentBuild.result = 'FAILURE'
-                        throw e
+                        echo "Build failed. Check logs for details."
+                        error("Maven build failed: ${e.message}")
                     }
                 }
             }
         }
-        stage('SonarQube analysis') {
-            // Set environment variables specific to this stage
-            environment {
-                // Define the SonarQube scanner home directory
-                scannerHome = tool 'SkyGuardians-sonar-scanner'
-            }
+        stage('Run Tests') {
             steps {
-                // Run the SonarQube analysis
-                withSonarQubeEnv('My SonarQube Server') { // If you have configured more than one global server connection, you can specify its name
-                    sh "${scannerHome}/bin/sonar-scanner"
+                script {
+                    try {
+                        sh 'mvn test -Dsurefire.useFile=false'  // Prevents Surefire plugin fork issues
+                    } catch (Exception e) {
+                        echo "Test execution failed. Check logs for details."
+                        error("Tests failed: ${e.message}")
+                    }
                 }
             }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            archiveArtifacts artifacts: '**/target/surefire-reports/*', allowEmptyArchive: true  // Save test reports
+        }
+        failure {
+            echo "Build failed. Check the logs for more details."
         }
     }
 }

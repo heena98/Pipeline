@@ -33,19 +33,17 @@ pipeline {
                 }
             }
         }
-         stage('SonarQube analysis') {
-            environment{
+        stage('SonarQube analysis') {
+            environment {
                 scannerHome = tool 'sonar-scanner'
-
             }
-//    def scannerHome = tool 'SonarScanner 4.0';
-        steps{
-        withSonarQubeEnv('ttrend-sonarqube-server') { 
-        // If you have configured more than one global server connection, you can specify its name
-        sh "${scannerHome}/bin/sonar-scanner"
-       // sh "mvn sonar:sonar"
-    }
-        }
+            steps {
+                withSonarQubeEnv('ttrend-sonarqube-server') {
+                    withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONARQUBE_TOKEN')]) {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=dev01_ttrend -Dsonar.organization=dev01 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARQUBE_TOKEN"
+                    }
+                }
+            }
         }
     }
     post {

@@ -35,7 +35,7 @@ pipeline {
         }
          stage('SonarQube analysis') {
             environment{
-                scannerHome = tool 'ttrend-Sonar-Scanner'
+                scannerHome = tool 'sonar-scanner'
 
             }
 //    def scannerHome = tool 'SonarScanner 4.0';

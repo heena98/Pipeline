@@ -5,32 +5,36 @@ pipeline {
         }
     }
     environment {
-        PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
-        MAVEN_OPTS = "-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError"  // Prevent memory issues
+        PATH = "/opt/apache-maven-3.9.2/bin:/opt/sonar-scanner/bin:$PATH"
+        MAVEN_OPTS = "-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError"
         MAVEN_HOME = "/opt/apache-maven-3.9.2"
         JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
     }
     stages {
-        stage('Build') {
-            steps {
-                script {
-                    try {
-                        sh 'mvn clean deploy -X'  // Enabling debug mode for Maven
-                    } catch (Exception e) {
-                        echo "Build failed. Check logs for details."
-                        error("Maven build failed: ${e.message}")
+        stage('Build and Test') {
+            parallel {
+                stage('Build') {
+                    steps {
+                        script {
+                            try {
+                                sh 'mvn clean deploy -X'
+                            } catch (Exception e) {
+                                echo "Build failed. Check logs for details."
+                                error("Maven build failed: ${e.message}")
+                            }
+                        }
                     }
                 }
-            }
-        }
-        stage('Run Tests') {
-            steps {
-                script {
-                    try {
-                        sh 'mvn test -Dsurefire.useFile=false'  // Prevents Surefire plugin fork issues
-                    } catch (Exception e) {
-                        echo "Test execution failed. Check logs for details."
-                        error("Tests failed: ${e.message}")
+                stage('Run Tests') {
+                    steps {
+                        script {
+                            try {
+                                sh 'mvn test -Dsurefire.useFile=false'
+                            } catch (Exception e) {
+                                echo "Test execution failed. Check logs for details."
+                                error("Tests failed: ${e.message}")
+                            }
+                        }
                     }
                 }
             }
@@ -53,12 +57,20 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-            archiveArtifacts artifacts: '**/target/surefire-reports/*', allowEmptyArchive: true  // Save test reports
-            // Add notifications here
+            archiveArtifacts artifacts: '**/target/surefire-reports/*', allowEmptyArchive: true
+            emailext(
+                to: 'team@example.com',
+                subject: "Build ${currentBuild.fullDisplayName}",
+                body: "Build ${currentBuild.fullDisplayName} completed. Check the details at ${env.BUILD_URL}"
+            )
         }
         failure {
             echo "Build failed. Check the logs for more details."
-            // Add notifications here
+            emailext(
+                to: 'team@example.com',
+                subject: "Build ${currentBuild.fullDisplayName} Failed",
+                body: "Build ${currentBuild.fullDisplayName} failed. Check the details at ${env.BUILD_URL}"
+            )
         }
     }
 }

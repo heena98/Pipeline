@@ -35,20 +35,20 @@ pipeline {
                 }
             }
         }
-        // stage('SonarQube analysis') {
-        //     environment {
-        //         scannerHome = tool 'sonar-scanner'
-        //     }
-        //     steps {
-        //         withSonarQubeEnv('sonar-server') {
-        //             withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONARQUBE_TOKEN')]) {
-        //                 retry(3) {
-        //                     sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=dev01_ttrend -Dsonar.organization=dev01 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.ws.timeout=60"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('SonarQube analysis') {
+            environment {
+                scannerHome = tool 'sonar-scanner'
+            }
+            steps {
+                withSonarQubeEnv('sonarqube-server') {
+                    withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONARQUBE_TOKEN')]) {
+                        retry(3) {
+                            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=dev01_ttrend -Dsonar.organization=dev01 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.ws.timeout=60"
+                        }
+                    }
+                }
+            }
+        }
     }
     post {
         always {
